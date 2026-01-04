@@ -98,3 +98,64 @@ Vite 的开发服务器是基于 Node.js 的 http 模块实现的。它会监听
 
 - 生产环境使用 Rollup 进行打包构建。TreeShaking 是 Rollup 的核心功能之一，可以有效减少最终产物的体积。
 - 代码分割，Rollup 支持动态导入，可以实现代码分割，
+
+# webpack
+
+## 1. webpack 核心概念
+
+1. 入口 Entry
+2. 输出 Output
+3. 加载器 Loaders
+4. 插件 Plugins
+5. 模块 Module
+6. 模式 Mode
+
+## 2. webpack 的 loader 和 plugin
+
+1. 常见的 loader
+
+   - babel-loader： 用于将 ES6+代码转换为向后兼容的 JavaScript 代码。(ES5)
+   - css-loader：使你可以使用类似@import 和 url()的方法实现 require()的功能来引入 CSS 文件。
+   - style-loader：将 CSS 插入到 DOM 中的 `<style>` 标签中。
+   - sass-loader：将 Sass/SCSS 文件编译为 CSS。
+   - file-loader：webpack5 内置了 Asset Modules，可以处理文件资源。
+   - url-loader：类似于 file-loader，但可以将小文件转换为 base64 URI。
+
+2. 常见的 plugin
+   - html-webpack-plugin：用于简化 HTML 文件的创建，自动引入打包后的资源。
+   - mini-css-extract-plugin：用于将 CSS 提取到单独的文件中，支持 CSS 代码分割。
+   - clean-webpack-plugin：用于在每次构建前清理输出目录。
+   - webpack-bundle-analyzer：用于可视化分析打包后的文件大小。
+   - define-plugin：用于定义全局常量，替换代码中的变量。
+
+## 3. 请详细说下 webpack5 的构建过程
+
+webpack5 的构建过程主要包括以下几个阶段：
+
+1. 初始化阶段
+   - 读取并合并配置文件（webpack.config.js）。
+   - 根据配置文件中的 entry 选项，确定入口文件。
+2. 构建依赖图
+   - 从入口文件开始，分析模块之间的依赖关系，构建出一个完整的依赖图。
+   - 解析模块。使用 Loaders 处理非 JS 文件，如 CSS、图片等。
+   - 创建模块对象。Webpack 为每个模块创建一个模块对象，并保存在内存中
+3. 模块编译
+   Webpack 使用 Loader 将模块的源代码转换为可以在浏览器中运行的 JS 代码。
+   - 处理模块
+   - 生成 AST
+   - 收集依赖
+4. 生成代码块（Chunks）
+   Webpack 会根据依赖图将模块分组，形成不同的代码块（Chunks）。这些代码块会被打包成一个或者多个最终的输出文件。
+   - 代码拆分： 根据配置里面的 optimization.splitChunks 进行代码拆分。
+   - 生成代码块，Chunk 对象
+5. 优化阶段
+   - 代码压缩：使用 TerserPlugin 对 JS 代码进行压缩，减少文件大小。
+   - CSS 压缩：使用 css-minimizer-webpack-plugin 对 CSS 代码进行压缩。
+   - Tree Shaking：去除未使用的代码，减小打包体积。
+   - 作用域提升：模块合并，提升运行效率。
+   - 其他优化：如懒加载、预加载等。
+6. 输出阶段
+   Webpack 将每个代码块转换为一个或者多个输出文件，并将其写入到磁盘上。
+   - 生成输出文件：根据 output 配置生成最终的输出文件。
+   - 写入磁盘：将生成的文件写入到指定的输出目录。
+   - 应用插件：会调用相关的插件，如 HtmlWebpackPlugin，来处理输出文件
