@@ -159,3 +159,97 @@ webpack5 的构建过程主要包括以下几个阶段：
    - 生成输出文件：根据 output 配置生成最终的输出文件。
    - 写入磁盘：将生成的文件写入到指定的输出目录。
    - 应用插件：会调用相关的插件，如 HtmlWebpackPlugin，来处理输出文件
+
+## webpack 笔记
+
+### 1 基础配置
+
+1. 入口 Entry
+
+- 单入口
+- 多入口： 使用列表
+- 对象形式： 使用对象定义（多个产物）
+
+2. 输出配置（output）
+
+- 输出为位置： path
+- 输出文件名： filename
+- 输出 chunk 文件名：chunkFilename
+- 环境配置： environment
+- 清理输出目录： clean
+
+3. 模块解析(module,里面配置对不同文件的 rule)
+   针对不同的文件类型，做转换处理，不同的 loader
+   -js
+   -ts
+   -image
+   -font,
+   -css,
+   -file
+
+4. 辅助解析(resolve)
+   resolve 配置了之后，在 import 的时候，可以省略文件扩展名
+
+5. devtool
+
+6. plugins
+
+7. optimization
+   比如 splitChunks
+
+8. devServer
+
+### 2 自定义配置
+
+1. 自定义 loader
+   本质是函数
+
+2. 自定义 plugin
+   本质是类
+
+# webpack 和 vite 的区别
+
+前提
+**浏览器原生的 ES Module 能力，指的是现代浏览器直接支持通过 <script type="module"> 标签加载和解析 JavaScript 模块（ESM），并且可以使用 import 和 export 语法来进行模块化开发。**
+
+主要特点：
+
+模块化语法：可以在 JS 文件中直接使用 import 和 export。
+按需加载：浏览器会自动根据依赖关系加载模块文件，实现懒加载和代码分割。
+作用域隔离：每个模块有自己的作用域，变量不会污染全局。
+网络请求：浏览器会根据 import 路径自动发起网络请求加载对应的模块文件。
+这意味着开发环境下，浏览器可以直接加载和运行模块化的 JS 文件，无需像 webpack 那样先打包合并。Vite 就是利用了这一能力，实现了更快的开发体验。
+
+# 说下你使用过哪些构建工具
+
+1. Webpack
+
+- 打包产物是 iife/umd 格式的
+
+2. Rollup
+
+- 多打包产物构建（umd,cmj,es）【多模块化规范输出】
+- 完全拥抱插件化，常规的功能都是功过插件实现的 （插件都是函数）
+
+3. 基于 go 语言的 esbuild
+   但是针对 ts 无法生成 dts（可参考 tsup，利用 rollup 的插件）
+
+4. Vite
+
+# 模块化规范
+
+1. CommonJS
+   这个规范主要用于服务端编程，Node.js 就是基于 CommonJS 规范实现的。加载模块是同步的，不适合浏览器环境，同步意味着阻塞加载，浏览器是异步加载的
+   因此有了 AMD，CMD 的方案。
+2. AMD （require.js）
+   这个规范主要用于浏览器端编程，支持异步加载模块，适合浏览器环境。AMD 使用 define 函数定义模块，使用 require 函数加载模块。
+   AMD 的缺点是语法复杂，不够直观，而且不支持循环依赖。
+3. CMD （sea.js）
+   和 AMD 类似，并实现了就近依赖。
+4. UMD (工厂函数) 可同时满足 AMD，CMD 和 CommonJS 规范
+5. ES Module （ECM， vite 能实现 bundless，完全依赖于这个特性）。ES6 在语言标准层面上，实现了模块功能，而且实现的简单，完全可以取代 commonJS 和 AMD。
+   成为浏览器和服务器通用的模块化规范。
+
+## 补充
+
+tree-shaking 必须是 esm 规范
