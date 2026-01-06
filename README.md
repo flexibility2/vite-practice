@@ -253,3 +253,13 @@ webpack5 的构建过程主要包括以下几个阶段：
 ## 补充
 
 tree-shaking 必须是 esm 规范
+
+# 一些工程规范
+
+- ESLint
+- Prettier
+- Commitlint
+- Husky
+- Lint-staged
+- Editorconfig
+- Spell-checker
